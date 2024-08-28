@@ -2,10 +2,10 @@ import numpy as np
 
 
 def differentiate(u, dt):
-    pass
+    return [(u[idx+1] - val) / dt for idx, val in enumerate(u[:-1])]
 
 def differentiate_vector(u, dt):
-    pass
+    return (u[1:] - u[:-1]) / dt
 
 def test_differentiate():
     t = np.linspace(0, 1, 10)
@@ -17,4 +17,3 @@ def test_differentiate():
 
 if __name__ == '__main__':
     test_differentiate()
-    

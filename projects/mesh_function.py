@@ -2,10 +2,13 @@ import numpy as np
 
 
 def mesh_function(f, t):
-    pass
+    return f(t)
 
 def func(t):
-    pass
+    result = np.full_like(t, np.nan, dtype="float64")
+    result[(0 <= t) * (t <= 3)] = np.exp(-t)[(0 <= t) * (t <= 3)]
+    result[(3 < t) * (t <= 4)] = np.exp(-3 * t)[(3 < t) * (t <= 4)]
+    return result
 
 def test_mesh_function():
     t = np.array([1, 2, 3, 4])
