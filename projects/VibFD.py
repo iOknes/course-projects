@@ -11,6 +11,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 import sympy as sp
 
+from scipy.sparse import diags
+from scipy.sparse.linalg import spsolve
+
 t = sp.Symbol('t')
 
 class VibSolver:
@@ -35,6 +38,13 @@ class VibSolver:
         self.w = w
         self.T = T
         self.set_mesh(Nt)
+
+    def __call__(self):
+        """
+        Generic call method
+        """
+        u = np.zeros(self.Nt+1)
+        return u
 
     def set_mesh(self, Nt):
         """Create mesh of chose size
@@ -141,8 +151,17 @@ class VibFD2(VibSolver):
         assert T.is_integer() and T % 2 == 0
 
     def __call__(self):
-        u = np.zeros(self.Nt+1)
-        return u
+        g = 2 - self.w**2 * self.dt**2
+        A = diags([1, -g, 1], [-1, 0, 1], shape=(self.Nt+1, self.Nt+1), format="lil")
+        A /= (self.w**2 * self.dt**2)
+        A[0,0] = 1
+        A[0,1:] = 0
+        A[-1,-1] = 1
+        A[-1:,:-1] = 0
+        b = np.zeros(self.Nt+1)
+        b[0] = self.I
+        b[-1] = self.I
+        return spsolve(A.tocsr(), b)
 
 class VibFD3(VibSolver):
     """
