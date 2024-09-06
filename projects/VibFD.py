@@ -157,7 +157,7 @@ class VibFD2(VibSolver):
         A[0,0] = 1
         A[0,1:] = 0
         A[-1,-1] = 1
-        A[-1:,:-1] = 0
+        A[-1,:-1] = 0
         b = np.zeros(self.Nt+1)
         b[0] = self.I
         b[-1] = self.I
