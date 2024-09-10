@@ -153,7 +153,6 @@ class VibFD2(VibSolver):
     def __call__(self):
         g = 2 - self.w**2 * self.dt**2
         A = diags([1, -g, 1], [-1, 0, 1], shape=(self.Nt+1, self.Nt+1), format="lil")
-        A /= (self.w**2 * self.dt**2)
         A[0,0] = 1
         A[0,1:] = 0
         A[-1,-1] = 1
