@@ -205,9 +205,33 @@ class VibFD4(VibFD2):
     """
     order = 4
 
-    def __call__(self):
-        u = np.zeros(self.Nt+1)
-        return u
+    def __call__(self, mat=False):
+        # Create solver matrix
+        g = -30 + 12 * self.dt**2 * self.w**2
+        A = diags([-1, 16, g, 16, -1], [-2, -1, 0, 1, 2], shape=(self.Nt+1, self.Nt+1), format="lil")
+
+        # Set boundry conditions
+        A[0,:] = 0
+        A[0,0] = 1
+        A[-1,:] = 0
+        A[-1,-1] = 1
+
+        # Set skewed scheme for boundry bordering points
+        g_skew = -15 + 12 * self.dt**2 * self.w**2
+        A[1,:] = 0
+        A[1,:6] = 10, g_skew, -4, 14, -6, 1
+        A[-2,:] = 0
+        A[-2,-6:] = -1, 6, -14, 4, -g_skew, -10
+
+        # Set boundry values
+        b = np.zeros(self.Nt+1)
+        b[0] = self.I
+        b[-1] = self.I
+
+        if mat:
+            return A
+        return spsolve(A.tocsr(), b)
+
 
 def test_order():
     w = 0.35
