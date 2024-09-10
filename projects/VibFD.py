@@ -178,9 +178,22 @@ class VibFD3(VibSolver):
         T = T * w / np.pi
         assert T.is_integer() and T % 2 == 0
 
-    def __call__(self):
-        u = np.zeros(self.Nt+1)
-        return u
+    def __call__(self, mat=False):
+        g = 2 - self.w**2 * self.dt**2
+        A = diags([1, -g, 1], [-1, 0, 1], shape=(self.Nt+1, self.Nt+1), format="lil")
+        A[0,:] = 0
+        A[0,0] = 1
+        A[-1,:] = 0
+        A[-1,-1] = 1
+        #A[-1,-2:] = 2, -2
+
+        b = np.zeros(self.Nt+1)
+        b[0] = self.I
+        b[-1] = self.I
+
+        if mat:
+            return A.toarray()
+        return spsolve(A.tocsr(), b)
 
 class VibFD4(VibFD2):
     """
