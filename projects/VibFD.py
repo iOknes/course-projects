@@ -184,12 +184,12 @@ class VibFD3(VibSolver):
         A[0,:] = 0
         A[0,0] = 1
         A[-1,:] = 0
-        A[-1,-1] = 1
-        #A[-1,-2:] = 2, -2
+        #A[-1,-1] = 1
+        A[-1,-3:] = 1, -4, 3
 
         b = np.zeros(self.Nt+1)
         b[0] = self.I
-        b[-1] = self.I
+        b[-1] = 0
 
         if mat:
             return A.toarray()
