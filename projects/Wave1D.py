@@ -88,7 +88,8 @@ class Wave1D:
             pass
 
         elif bc == 2: # Open boundary
-            raise NotImplementedError
+            u[0] = 2 * (1 - self.c) * self.un[0] + (1 - self.c)/(1 + self.c) * self.unm1[0] + (2 * self.c**2)/(1 + self.c) * self.un[1]
+            u[-1] = 2 * (1 - self.c) * self.un[-1] + (1 - self.c)/(1 + self.c) * self.unm1[-1] + (2 * self.c**2)/(1 + self.c) * self.un[-2]
 
         elif bc == 3:
             raise NotImplementedError
