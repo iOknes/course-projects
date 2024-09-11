@@ -46,11 +46,19 @@ class Wave1D:
         The returned matrix is not divided by dx**2
         """
         D = sparse.diags([1, -2, 1], [-1, 0, 1], (self.N+1, self.N+1), 'lil')
+
+        if bc == 0: # Dirichlet condition
+            D[0,:] = 0
+            D[-1,:] = 0
+
         if bc == 1: # Neumann condition is baked into stencil
-            raise NotImplementedError
+            D[0,:] = 0
+            D[0,:2] = -2, 2
+            D[-1,:] = 0
+            D[-1,-2:] = 2, -2
 
         elif bc == 3: # periodic (Note u[0] = u[-1])
-            raise NotImplementedError
+            D
 
         return D
 
@@ -72,8 +80,9 @@ class Wave1D:
         """
         u = u if u is not None else self.unp1
         if bc == 0: # Dirichlet condition
-            u[0] = 0
-            u[-1] = 0
+            pass
+            #u[0] = 0
+            #u[-1] = 0
 
         elif bc == 1: # Neumann condition
             pass
@@ -204,4 +213,3 @@ if __name__ == '__main__':
     #sol.animation(data)
     test_pulse_bcs()
     #data = sol(200, bc=2, ic=0, save_step=100)
-
