@@ -58,7 +58,7 @@ class Wave1D:
             D[-1,-2:] = 2, -2
 
         elif bc == 3: # periodic (Note u[0] = u[-1])
-            D
+            D[0, -2] = 1
 
         return D
 
@@ -92,7 +92,8 @@ class Wave1D:
             u[-1] = 2 * (1 - self.c) * self.un[-1] + (1 - self.c)/(1 + self.c) * self.unm1[-1] + (2 * self.c**2)/(1 + self.c) * self.un[-2]
 
         elif bc == 3:
-            raise NotImplementedError
+            u[0] = 2 * self.un[0] - self.unm1[0] + self.c**2 * (self.un[1] - 2 * self.un[0] + self.un[-2])
+            u[-1] = u[0]
 
         else:
             raise RuntimeError(f"Wrong bc = {bc}")
