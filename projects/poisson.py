@@ -113,7 +113,13 @@ class Poisson:
         return np.sqrt(self.dx*np.sum((uj-u)**2))
 
 def test_poisson():
-    assert False
+    L = 2
+    sol = Poisson(L=L)
+    ue = sp.exp(4*sp.cos(x))
+    #ue = x**2
+    bc = (ue.subs(x, 0), ue.subs(x, L))
+    u = sol(100, bc=bc, f=sp.diff(ue, x, 2))
+    assert np.allclose(u, sp.lambdify(x, ue)(sol.create_mesh(100)), rtol=0.01)
 
 if __name__ == '__main__':
     L = 2
