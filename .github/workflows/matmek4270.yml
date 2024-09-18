@@ -29,3 +29,4 @@ jobs:
           pytest decay_v3.py mesh_function.py differentiate.py
           pytest VibFD.py
           pytest Wave1D.py
+          pytest poisson.py poisson2d.py
